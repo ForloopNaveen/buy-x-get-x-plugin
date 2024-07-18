@@ -21,3 +21,4 @@ if(class_exists('\Bxgx\App\Router')){
     $router = new \Bxgx\App\Router();
     $router->init();
 }
+

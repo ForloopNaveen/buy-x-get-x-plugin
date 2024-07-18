@@ -17,7 +17,7 @@ class Router
     {
         add_action('admin_menu', [Main::class, 'addSubMenuInProductTab']);
         add_action('admin_enqueue_scripts', [Main::class, 'enqueueScriptsAndStyles']);
-        add_action('wp_ajax_bxgx_save_products', [Main::class,'saveBuyxGetxProducts']);
+        add_action('wp_ajax_update_buy_x_get_x_products', [Main::class,'saveBuyxGetxProducts']);
 
         add_action('woocommerce_single_product_summary', [Main::class,'displayFreeProductMessageInFrontend'], 20);
         add_action('woocommerce_add_to_cart', [Main::class,'addFreeProductToCart'], 10, 3);

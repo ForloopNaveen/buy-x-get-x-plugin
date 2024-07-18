@@ -31,33 +31,36 @@ class Main
 
     public static function enqueueScriptsAndStyles() {
         wp_enqueue_style('bxgx-style', BXGX_PLUGIN_URL . 'Assets/css/style.css');
-        wp_enqueue_script('script', BXGX_PLUGIN_URL . 'Assets/js/script.js', array('jquery'), null, true);
+        wp_enqueue_script('buy-x-get-x-script', BXGX_PLUGIN_URL . 'Assets/js/script.js', array('jquery'), null, true);
 
 
-        wp_localize_script('script', 'BxgxScript', array(
+        wp_localize_script('buy-x-get-x-script', 'buyXGetXData', array(
             'ajax_url' => admin_url('admin-ajax.php')
+
         ));
     }
 
-    public static function saveBuyxGetxProducts() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['selected_products'])) {
-                $selected_products = explode(',', sanitize_text_field($_POST['selected_products']));
-                foreach ($selected_products as $product_id) {
-                    update_post_meta($product_id, '_buy_x_get_x_enabled', 'yes');
-                }
-                echo "Product added Successfully!";
+    public static function saveBuyxGetxProducts()
+    {
 
-            } elseif (isset($_POST['unselected_products'])) {
-                $unselected_products = explode(',', sanitize_text_field($_POST['unselected_products']));
-                foreach ($unselected_products as $product_id) {
-                    update_post_meta($product_id, '_buy_x_get_x_enabled', 'no');
-                }
-                echo "Product removed Successfully!";
 
-            }
+        $selected_products = isset($_POST['selected_products']) ? $_POST['selected_products'] : array();
+        $unselected_products = isset($_POST['unselected_products']) ? $_POST['unselected_products'] : array();
+
+
+        foreach ($selected_products as $product_id) {
+            update_post_meta($product_id, '_buy_x_get_x_enabled', 'yes');
         }
+        foreach ($unselected_products as $product_id) {
+            update_post_meta($product_id, '_buy_x_get_x_enabled', 'no');
+        }
+
+        wp_send_json_success(array('message' => 'Products updated successfully.'));
+        wp_send_json_error(array('message' => 'Some problem occurred, please try again.'));
     }
+
+
+
 
 
     public static function displayFreeProductMessageInFrontend() {
@@ -73,7 +76,7 @@ class Main
 
 
     public static function addFreeProductToCart($cart_item_key, $product_id, $quantity) {
-            if (get_post_meta($product_id, '_buy_x_get_x_enabled', true) === 'yes') {
+        if (get_post_meta($product_id, '_buy_x_get_x_enabled', true) === 'yes') {
             $free_product_id = $product_id;
             $found = false;
 
@@ -87,7 +90,6 @@ class Main
             if (!$found) {
                 WC()->cart->add_to_cart($free_product_id, $quantity, 0, array(), array('is_free' => true, 'main_product_key' => $cart_item_key));
             }
-
         }
     }
 
@@ -116,11 +118,10 @@ class Main
      * @return void
      */
 
-    public static function synchronizeFreeProductQuantity($cart_item_key, $quantity,$old_quantity ,$cart) {
+    public static function synchronizeFreeProductQuantity($cart_item_key, $quantity, $old_quantity, $cart) {
         foreach ($cart->get_cart() as $key => $cart_item) {
             if (isset($cart_item['is_free']) && $cart_item['main_product_key'] == $cart_item_key) {
                 WC()->cart->set_quantity($key, $quantity);
-
             }
         }
     }
