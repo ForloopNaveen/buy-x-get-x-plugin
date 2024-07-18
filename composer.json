@@ -1,0 +1,11 @@
+{
+  "name": "buyxgetx/buy-x-get-x",
+  "description": "This is to enable buy one get one offer",
+  "type": "project",
+  "license": "GPL2 or latest",
+  "autoload": {
+    "psr-4": {
+      "Bxgx\\": ""
+    }
+  }
+}

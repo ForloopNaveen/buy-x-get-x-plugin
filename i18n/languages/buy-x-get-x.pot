@@ -1,0 +1,78 @@
+# Copyright (C) 2024 Naveen kumar
+# This file is distributed under the same license as the Buy X Get X Free plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Buy X Get X Free 1.8\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/buy-x-get-x\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-07-17T13:01:47+05:30\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: buy-x-get-x\n"
+
+#. Plugin Name of the plugin
+#: buy-x-get-x.php
+msgid "Buy X Get X Free"
+msgstr ""
+
+#. Description of the plugin
+#: buy-x-get-x.php
+msgid "A custom WooCommerce plugin to enable Buy X Get X Free functionality."
+msgstr ""
+
+#. Author of the plugin
+#: buy-x-get-x.php
+msgid "Naveen kumar"
+msgstr ""
+
+#: App/Controller/Admin/Main.php:135
+msgid "Free Gift"
+msgstr ""
+
+#: App/Controller/Admin/Main.php:136
+msgid "This product is free with your purchase"
+msgstr ""
+
+#: App/View/Main.php:52
+msgid "Select Buy-x-get-x products"
+msgstr ""
+
+#: App/View/Main.php:53
+msgid "Unselect Buy-x-get-x products"
+msgstr ""
+
+#: App/View/Main.php:61
+msgid "Select the Free Product"
+msgstr ""
+
+#: App/View/Main.php:65
+msgid "Select Product"
+msgstr ""
+
+#: App/View/Main.php:82
+msgid "Selected Product"
+msgstr ""
+
+#: App/View/Main.php:91
+msgid "Submit"
+msgstr ""
+
+#: App/View/Main.php:112
+msgid "Unselect the Free Product"
+msgstr ""
+
+#: App/View/Main.php:116
+msgid "Unselect Product"
+msgstr ""
+
+#: App/View/Main.php:133
+msgid "Unselected Products"
+msgstr ""
+
+#: App/View/Main.php:142
+msgid "Unselect"
+msgstr ""
