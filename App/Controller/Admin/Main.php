@@ -6,7 +6,11 @@ defined("ABSPATH") or die();
 
 class Main
 {
-
+    /**
+     * This is function to add custom sub-menu tab in product menu
+     *
+     * @return void
+     */
     public static function addSubMenuInProductTab(){
         add_submenu_page(
             'edit.php?post_type=product',
@@ -19,6 +23,11 @@ class Main
         );
     }
 
+    /**
+     * This is a call back function it contains an all element of our tab
+     *
+     * @return void
+     */
     public static function buyxGetxProductPage() {
         $file_path = BXGX_PLUGIN_PATH.'App/View/';
         wc_get_template(
@@ -29,37 +38,72 @@ class Main
         );
     }
 
+    /**
+     * This is a function to enqueue our scripts and styles
+     *
+     * @return void
+     */
     public static function enqueueScriptsAndStyles() {
-        wp_enqueue_style('bxgx-style', BXGX_PLUGIN_URL . 'Assets/css/style.css');
+        wp_enqueue_style('bxgx-style', BXGX_PLUGIN_URL . 'Assets/css/style.min.css');
         wp_enqueue_script('buy-x-get-x-script', BXGX_PLUGIN_URL . 'Assets/js/script.js', array('jquery'), null, true);
 
+        $enabled_products = get_posts(array(
+            'post_type' => 'product',
+            'post_status' => 'publish',
+            'meta_query' => array(
+                array(
+                    'key' => '_buy_x_get_x_enabled',
+                    'value' => 'yes',
+                    'compare' => '='
+                )
+            ),
+            'posts_per_page' => -1,
+        ));
+
+        $initiallyEnabledProducts = array();
+        foreach ($enabled_products as $product) {
+            $initiallyEnabledProducts[] = array(
+                'id' => $product->ID,
+                'title' => $product->post_title,
+            );
+        }
 
         wp_localize_script('buy-x-get-x-script', 'buyXGetXData', array(
-            'ajax_url' => admin_url('admin-ajax.php')
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'initiallyEnabledProducts' => json_encode($initiallyEnabledProducts),
 
         ));
     }
 
+    /**
+     * This is a function to enable  buy x get x
+     *
+     * @return void
+     */
     public static function saveBuyxGetxProducts()
     {
+        $products_to_enable = isset($_POST['products_to_enable']) ? array_map('intval', $_POST['products_to_enable']) : [];
+        $products_to_disable = isset($_POST['products_to_disable']) ? array_map('intval', $_POST['products_to_disable']) : [];
 
-
-        $selected_products = isset($_POST['selected_products']) ? $_POST['selected_products'] : array();
-        $unselected_products = isset($_POST['unselected_products']) ? $_POST['unselected_products'] : array();
-
-
-        foreach ($selected_products as $product_id) {
+        // Enable the selected products
+        foreach ($products_to_enable as $product_id) {
             update_post_meta($product_id, '_buy_x_get_x_enabled', 'yes');
         }
-        foreach ($unselected_products as $product_id) {
+
+        // Disable the unselected products
+        foreach ($products_to_disable as $product_id) {
             update_post_meta($product_id, '_buy_x_get_x_enabled', 'no');
         }
 
-        wp_send_json_success(array('message' => 'Products updated successfully.'));
-        wp_send_json_error(array('message' => 'Some problem occurred, please try again.'));
+        wp_send_json_success(array('message' => 'Products updated'));
+
     }
 
-
+    /**
+     * This is a function to display a free product message in the frontend
+     *
+     * @return void
+     */
 
 
 
@@ -73,6 +117,14 @@ class Main
         );
     }
 
+    /**
+     * This function handle add to cart functionality
+     *
+     * @param $cart_item_key
+     * @param $product_id
+     * @param $quantity
+     * @return void
+     */
 
 
     public static function addFreeProductToCart($cart_item_key, $product_id, $quantity) {
@@ -86,7 +138,6 @@ class Main
                     break;
                 }
             }
-
             if (!$found) {
                 WC()->cart->add_to_cart($free_product_id, $quantity, 0, array(), array('is_free' => true, 'main_product_key' => $cart_item_key));
             }
